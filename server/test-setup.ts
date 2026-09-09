@@ -5,6 +5,7 @@ import { join } from 'node:path';
 // Tests never load .env.local or touch the user's research. Unexpected fetches
 // fail closed. Individual provider tests replace fetch with their own mocks.
 const directory = mkdtempSync(join(tmpdir(), 'drift-tests-'));
+process.env.DRIFT_TEST = '1';
 process.env.MONGODB_URI = '';
 process.env.DRIFT_RESEARCH_DATA_DIR = directory;
 process.env.OPENROUTER_API_KEY = '';

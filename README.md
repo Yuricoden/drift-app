@@ -50,6 +50,14 @@ secret is ever exposed to the client bundle.
 
 Set `DRIFT_DEBUG=1` to log auth decisions per request. In production behind HTTPS, run with `NODE_ENV=production` so the session cookie is marked `Secure`.
 
+## Vercel deployment
+
+Vercel serves the Vite `dist/` output and runs `api/[...path].ts` as the catch-all serverless API. The rewrites in `vercel.json` make direct links work by mapping `/login` to `login.html`, and `/onboarding` plus `/app/*` to `app.html`.
+
+Add these project environment variables in Vercel: `DRIFT_LOGIN_EMAIL`, `DRIFT_LOGIN_PASSWORD`, `SESSION_SECRET`, `MONGODB_URI`, `MONGODB_DB`, `OPENROUTER_API_KEY`, and `SERPAPI_API_KEY`. Use MongoDB Atlas; without `MONGODB_URI`, each serverless invocation uses temporary in-memory/local research storage and will not reliably persist sessions or signals.
+
+Serverless functions are request-scoped. Starting Trend Research or signal extraction must stay within the configured function duration; for longer jobs, move that work to a queue or a persistent background worker.
+
 ## Data model (MongoDB, single owner = the env account)
 
 - `profiles` — onboarding completion + preferences
