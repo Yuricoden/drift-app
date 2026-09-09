@@ -120,7 +120,16 @@ export function TransferLab() {
       {transfer && t && transferIndustry && (
         <article class="transfer__result">
           <header class="transfer__result-head">
-            <p class="mono">Transfer experiment · {transferSignal?.name ?? transfer.provenance?.sourceSignalName ?? transfer.signalId} × {transferIndustry.name}</p>
+            <div class="transfer__experiment-row">
+              <p class="mono">Transfer experiment · {transferSignal?.name ?? transfer.provenance?.sourceSignalName ?? transfer.signalId} × {transferIndustry.name}</p>
+              {generated ? (
+                <a class="btn" href="/app/opportunities"><span class="btn__text">Open Opportunities</span><span class="btn__arrow" aria-hidden="true">↗</span></a>
+              ) : (
+                <button type="button" class="btn btn--solid" disabled={opportunitiesBusy || !transfer.provenance || !transfer.analysis} onClick={() => void generateOpportunities()}>
+                  <span class="btn__text">{opportunitiesBusy ? 'Generating…' : 'Generate Opportunities'}</span><span class="btn__arrow" aria-hidden="true">↗</span>
+                </button>
+              )}
+            </div>
             <h2>What <em>{transferSignal?.name ?? transfer.provenance?.sourceSignalName ?? transfer.signalId}</em> could mean<br />inside {transferIndustry.name}.</h2>
             <SaveButton type="transfer" refId={transfer.id} />
           </header>
@@ -199,4 +208,3 @@ function ListBlock(props: { title: string; items: string[]; tone?: 'risk' | 'spa
     </section>
   );
 }
-

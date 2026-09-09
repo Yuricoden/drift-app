@@ -1034,7 +1034,34 @@ body.drift-app {
 .transfer__result-head .mono {
   color: var(--bone-40);
   font-size: 0.6rem;
+}
+.transfer__experiment-row {
   grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(12px, 2vw, 24px);
+  min-width: 0;
+}
+.transfer__experiment-row p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.transfer__experiment-row .btn {
+  flex-shrink: 0;
+}
+.transfer__experiment-row .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+@media (max-width: 600px) {
+  .transfer__experiment-row .btn {
+    max-width: 55%;
+    padding: 12px 14px;
+    gap: 8px;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
 }
 .transfer__result-head h2 {
   font-family: var(--font-serif);
@@ -1063,12 +1090,14 @@ body.drift-app {
   border-top: 1px solid var(--line);
   padding-top: 28px;
 }
+.transfer__experiment-row .btn--solid,
 .transfer__result-foot .btn--solid {
   background: #343b2b;
   border-color: #343b2b;
   color: var(--ink);
 }
-.transfer__result-foot .btn--solid:hover {
+.transfer__experiment-row .btn--solid:hover:not(:disabled),
+.transfer__result-foot .btn--solid:hover:not(:disabled) {
   background: #535e43;
   border-color: #535e43;
 }
