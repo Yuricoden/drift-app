@@ -1,0 +1,37 @@
+{
+  "name": "drift-landing",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "tsx --env-file-if-exists=.env.local server/index.ts",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit",
+    "test:browser": "npm run build && node --experimental-websocket --import tsx --import ./server/test-setup.ts server/signals/browser-check.ts",
+    "test": "node --import tsx --import ./server/test-setup.ts --test server/llm/research.test.ts server/llm/extract.test.ts server/chat/agent.test.ts server/trends/trends.test.ts server/research/serpapi.test.ts server/research/openrouter-web.test.ts server/signals/extraction.test.ts server/intelligence/generation.test.ts server/signals/routes.test.ts"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "@types/d3-force": "^3.0.10",
+    "@types/d3-selection": "^3.0.11",
+    "@types/d3-zoom": "^3.0.8",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.5.0",
+    "tsx": "^4.23.13",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "d3-force": "^3.0.0",
+    "d3-selection": "^3.0.0",
+    "d3-zoom": "^3.0.0",
+    "express": "^5.2.1",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.4",
+    "mongodb": "^7.6.0",
+    "preact": "^10.29.8",
+    "preact-iso": "^2.12.2"
+  }
+}
