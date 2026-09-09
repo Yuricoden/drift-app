@@ -1,7 +1,7 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import type { NextFunction, Request, Response } from 'express';
-import { env } from './env';
-import { getStore } from './db';
+import { env } from './env.js';
+import { getStore } from './db.js';
 
 export const SESSION_COOKIE = 'drift_session';
 const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;

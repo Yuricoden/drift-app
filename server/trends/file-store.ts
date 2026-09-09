@@ -1,7 +1,7 @@
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import type { DocCollection } from '../db';
+import type { DocCollection } from '../db.js';
 
 // Durable fallback for local, single-process deployments. MongoDB is used for
 // multiple server workers. Serialize read-modify-write operations by file path.

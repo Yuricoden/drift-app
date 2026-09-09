@@ -52,9 +52,13 @@ Set `DRIFT_DEBUG=1` to log auth decisions per request. In production behind HTTP
 
 ## Vercel deployment
 
-Vercel serves the Vite `dist/` output and runs `api/[...path].ts` as the catch-all serverless API. The rewrites in `vercel.json` make direct links work by mapping `/login` to `login.html`, and `/onboarding` plus `/app/*` to `app.html`.
+Vercel serves the Vite `dist/` output and runs the Express API through `api/index.ts`. An explicit `/api/:path*` → `/api` rewrite sends nested requests such as `/api/auth/login` to that function. The other rewrites map `/login` to `login.html`, and `/onboarding` plus `/app/*` to `app.html`.
+
+Server-side relative imports use `.js` extensions so compiled ES modules can load in Node without the local `tsx` loader. `npm run build` checks the server entry points with NodeNext resolution before building the frontend. The deployment regression test also compiles the API into an isolated directory and verifies session reads and login in plain Node using fixture credentials.
 
 Add these project environment variables in Vercel: `DRIFT_LOGIN_EMAIL`, `DRIFT_LOGIN_PASSWORD`, `SESSION_SECRET`, `MONGODB_URI`, `MONGODB_DB`, `OPENROUTER_API_KEY`, and `SERPAPI_API_KEY`. Use MongoDB Atlas; without `MONGODB_URI`, each serverless invocation uses temporary in-memory/local research storage and will not reliably persist sessions or signals.
+
+Select Production for the live site's variables and redeploy after changing them. Set values directly in Vercel without adding `.env`-style wrapping quotes; password whitespace is significant. Deploy from the project root so both `api/` and `vercel.json` are included. To diagnose login, an unauthenticated `GET /api/auth/session` should return HTTP 200 with JSON; Vercel `NOT_FOUND` (404) or `FUNCTION_INVOCATION_FAILED` (500) means routing or runtime startup is failing before credentials can be checked. Inspect Runtime Logs for startup exceptions; never log passwords or API keys.
 
 Serverless functions are request-scoped. Starting Trend Research or signal extraction must stay within the configured function duration; for longer jobs, move that work to a queue or a persistent background worker.
 

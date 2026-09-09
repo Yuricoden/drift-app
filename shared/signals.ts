@@ -1,5 +1,5 @@
-import type { ExtractedSignal } from './types';
-import { INDUSTRY_MAP } from './catalog/industries';
+import type { ExtractedSignal } from './types.js';
+import { INDUSTRY_MAP } from './catalog/industries.js';
 
 export const validIndustries = (ids: string[]) => [...new Set(ids.filter(id => INDUSTRY_MAP.has(id)))];
 export function momentumLabel(signal: ExtractedSignal): string {

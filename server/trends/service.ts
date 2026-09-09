@@ -1,12 +1,12 @@
 import { randomUUID } from 'node:crypto';
-import type { OnboardingPrefs, TrendFeed, TrendResearchState, TrendTopic } from '../../shared/types';
-import { getStore, type Store } from '../db';
-import { env } from '../env';
-import { ResearchError } from '../llm/research';
-import { CHANNELS, mergeTopic, parseTopics } from './topics';
-import { retrieveChannelEvidence, NO_TERMS_REASON } from './retrieve';
-import { synthesizeTopics } from './synthesize';
-import { extraction } from '../signals/extraction';
+import type { OnboardingPrefs, TrendFeed, TrendResearchState, TrendTopic } from '../../shared/types.js';
+import { getStore, type Store } from '../db.js';
+import { env } from '../env.js';
+import { ResearchError } from '../llm/research.js';
+import { CHANNELS, mergeTopic, parseTopics } from './topics.js';
+import { retrieveChannelEvidence, NO_TERMS_REASON } from './retrieve.js';
+import { synthesizeTopics } from './synthesize.js';
+import { extraction } from '../signals/extraction.js';
 
 export class TrendError extends Error {
   constructor(public status: number, message: string) { super(message); }

@@ -1,8 +1,8 @@
-import { env } from '../env';
-import { gateway as defaultGateway, type Citation, type Gateway, LlmError } from './openrouter';
-import type { Evidence, ProviderReport, ResearchProvider } from '../../shared/evidence';
-import { ResearchError } from '../research/errors';
-export { ResearchError } from '../research/errors';
+import { env } from '../env.js';
+import { gateway as defaultGateway, type Citation, type Gateway, LlmError } from './openrouter.js';
+import type { Evidence, ProviderReport, ResearchProvider } from '../../shared/evidence.js';
+import { ResearchError } from '../research/errors.js';
+export { ResearchError } from '../research/errors.js';
 
 /** All live research goes directly to Perplexity through OpenRouter. */
 export interface ResearchResult {
@@ -27,9 +27,9 @@ export interface ResearchDeps {
   /** OpenRouter web plugin configuration, e.g. domain-restricted search. */
   plugins?: Array<Record<string, unknown>>;
   /** Channel this evidence belongs to; defaults to wider web. */
-  source?: import('../../shared/evidence').ResearchSource;
+  source?: import('../../shared/evidence.js').ResearchSource;
   /** Provider label for the evidence and reports. */
-  provider?: import('../../shared/evidence').ResearchProvider;
+  provider?: import('../../shared/evidence.js').ResearchProvider;
   /**
    * Hard, server-side acceptance test for a citation URL. Anything rejected is
    * removed before evidence is built, so a topic can never cite it. Provider
@@ -37,7 +37,7 @@ export interface ResearchDeps {
    */
   acceptUrl?: (url: string) => boolean;
   /** Applied after URL validation, e.g. to require explicit US relevance. */
-  acceptEvidence?: (evidence: import('../../shared/evidence').Evidence) => boolean;
+  acceptEvidence?: (evidence: import('../../shared/evidence.js').Evidence) => boolean;
   /** Recorded on the provider report when everything was filtered out. */
   emptyReason?: string;
 }
@@ -90,7 +90,7 @@ export async function runResearch(query: string, deps: ResearchDeps = {}): Promi
   } catch (error) {
     if (error instanceof LlmError && ['timeout', 'transient'].includes(error.kind) && attempt === 1 && !deps.signal?.aborted) { retryReason = `retry-after-${error.kind}`; continue; }
     const kind = error instanceof LlmError && ['credentials', 'budget', 'cancelled', 'rate_limited', 'timeout', 'transient'].includes(error.kind)
-      ? error.kind as import('../../shared/evidence').ResearchErrorKind : 'unavailable';
+      ? error.kind as import('../../shared/evidence.js').ResearchErrorKind : 'unavailable';
     throw new ResearchError(kind, 'Perplexity research is unavailable (' + kind + '). Saved research is unchanged.', provider, kind, attempt);
   }
   throw new ResearchError('unavailable', 'Perplexity research is unavailable.');

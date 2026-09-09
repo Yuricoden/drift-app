@@ -1,5 +1,5 @@
-import type { Evidence, ProviderReport } from '../../shared/evidence';
-import type { ResearchResult } from '../llm/research';
+import type { Evidence, ProviderReport } from '../../shared/evidence.js';
+import type { ResearchResult } from '../llm/research.js';
 
 export function evidenceResult(evidence: Evidence[], reports: ProviderReport[], answer?: string): ResearchResult {
   const providers = [...new Set(reports.map((r) => r.provider))];

@@ -1,9 +1,9 @@
-import { env } from '../env';
-import * as repos from '../repos';
-import { INDUSTRY_MAP } from '../../shared/catalog/industries';
-import { analysisChat } from '../llm/analysis';
-import type { ChatOptions, ChatResult } from '../llm/openrouter';
-import type { ExtractedSignal, GenerationProvenance, HypothesisAnalysis, Opportunity, TransferInterpretation, WorkspaceSections } from '../../shared/types';
+import { env } from '../env.js';
+import * as repos from '../repos.js';
+import { INDUSTRY_MAP } from '../../shared/catalog/industries.js';
+import { analysisChat } from '../llm/analysis.js';
+import type { ChatOptions, ChatResult } from '../llm/openrouter.js';
+import type { ExtractedSignal, GenerationProvenance, HypothesisAnalysis, Opportunity, TransferInterpretation, WorkspaceSections } from '../../shared/types.js';
 
 export const ANALYSIS_VERSION = 'research-hypotheses-v1';
 export class GenerationError extends Error {

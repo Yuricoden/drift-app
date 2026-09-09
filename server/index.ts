@@ -1,8 +1,8 @@
 import { resolve } from 'node:path';
 import express from 'express';
-import { cleanUrls, createApi, pageGuard } from './app';
-import { env } from './env';
-import { getStore } from './db';
+import { cleanUrls, createApi, pageGuard } from './app.js';
+import { env } from './env.js';
+import { getStore } from './db.js';
 
 /** Production entry: serves the Vite build plus the DRIFT API on one port. */
 async function main() {

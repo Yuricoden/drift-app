@@ -1,4 +1,6 @@
 /** Login page: server-validated credentials, then route by onboarding state. */
+import { loginErrorMessage } from './response';
+
 const form = document.querySelector<HTMLFormElement>('#login-form')!;
 const emailInput = document.querySelector<HTMLInputElement>('#login-email')!;
 const passwordInput = document.querySelector<HTMLInputElement>('#login-password')!;
@@ -28,13 +30,14 @@ form.addEventListener('submit', async (event) => {
     });
     if (!res.ok) {
       const data = (await res.json().catch(() => ({}))) as { error?: string };
-      fail(data.error ?? 'Those credentials do not match the DRIFT account.');
+      console.error('[drift] Login request failed', { status: res.status });
+      fail(loginErrorMessage(res.status, data));
       return;
     }
     const data = (await res.json()) as { onboardingCompleted: boolean };
     window.location.href = data.onboardingCompleted ? '/app/discover' : '/onboarding';
   } catch {
-    fail('Could not reach the DRIFT server. Is it running?');
+    fail('Could not reach the login service. Please check your connection and try again.');
   } finally {
     submit.disabled = false;
     submit.querySelector('.btn__text')!.textContent = 'Enter DRIFT';

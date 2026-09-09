@@ -1,4 +1,4 @@
-import { env } from '../env';
+import { env } from '../env.js';
 
 /**
  * The single OpenRouter API gateway. All research and AI features go through

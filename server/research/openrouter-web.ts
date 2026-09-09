@@ -1,6 +1,6 @@
-import type { Evidence } from '../../shared/evidence';
-import { runResearch, type ResearchDeps, type ResearchResult } from '../llm/research';
-import { parseRelativeDays, redditUrl, usBasis, youtubeVideoUrl } from './domains';
+import type { Evidence } from '../../shared/evidence.js';
+import { runResearch, type ResearchDeps, type ResearchResult } from '../llm/research.js';
+import { parseRelativeDays, redditUrl, usBasis, youtubeVideoUrl } from './domains.js';
 
 /**
  * Web-grounded research sources that run through OpenRouter's web plugin on

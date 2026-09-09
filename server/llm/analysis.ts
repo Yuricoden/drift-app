@@ -1,7 +1,7 @@
-import { env } from '../env';
-import { getStore, type Store } from '../db';
-import { gateway, LlmError, type ChatOptions, type ChatResult, type Gateway } from './openrouter';
-import { ResearchError } from '../research/errors';
+import { env } from '../env.js';
+import { getStore, type Store } from '../db.js';
+import { gateway, LlmError, type ChatOptions, type ChatResult, type Gateway } from './openrouter.js';
+import { ResearchError } from '../research/errors.js';
 
 /** Shares the monthly spending ledger with Trend Research. Unknown costs keep
  * the conservative reservation. Every paid attempt, including retry, reserves. */

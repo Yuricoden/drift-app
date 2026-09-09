@@ -1,6 +1,6 @@
 /** Shared types for the DRIFT client and server. */
-import type { Evidence, ResearchMetadata, TrendMomentum } from './evidence';
-export type { Evidence, ResearchSource, ResearchProvider, ProviderReport, ResearchMetadata, TrendMomentum } from './evidence';
+import type { Evidence, ResearchMetadata, TrendMomentum } from './evidence.js';
+export type { Evidence, ResearchSource, ResearchProvider, ProviderReport, ResearchMetadata, TrendMomentum } from './evidence.js';
 
 export type SignalStage = 'Weak' | 'Emerging' | 'Accelerating' | 'Mainstream';
 

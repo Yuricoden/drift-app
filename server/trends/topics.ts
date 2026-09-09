@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
-import type { TrendChannel, TrendSource, TrendTopic } from '../../shared/types';
-import type { ResearchResult } from '../llm/research';
+import type { TrendChannel, TrendSource, TrendTopic } from '../../shared/types.js';
+import type { ResearchResult } from '../llm/research.js';
 
 export const CHANNELS: TrendChannel[] = ['reddit', 'youtube', 'google-trends', 'web'];
 

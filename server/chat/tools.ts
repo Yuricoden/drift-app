@@ -1,13 +1,13 @@
 import { randomUUID } from 'node:crypto';
-import { listSignals } from '../repos';
-import { momentumLabel } from '../../shared/signals';
-import { INDUSTRIES, industryName } from '../../shared/catalog/industries';
-import { ResearchError, type ResearchResult } from '../llm/research';
-import { collectResearch } from '../research/collect';
-import { evidenceResult } from '../research/evidence';
-import type { ResearchSource } from '../../shared/evidence';
-import type { ToolSpec } from '../llm/openrouter';
-import type { ActionProposal, ExtractedSignal, ToolEvent } from '../../shared/types';
+import { listSignals } from '../repos.js';
+import { momentumLabel } from '../../shared/signals.js';
+import { INDUSTRIES, industryName } from '../../shared/catalog/industries.js';
+import { ResearchError, type ResearchResult } from '../llm/research.js';
+import { collectResearch } from '../research/collect.js';
+import { evidenceResult } from '../research/evidence.js';
+import type { ResearchSource } from '../../shared/evidence.js';
+import type { ToolSpec } from '../llm/openrouter.js';
+import type { ActionProposal, ExtractedSignal, ToolEvent } from '../../shared/types.js';
 
 /**
  * Read-only + suggest tool registry for the conversational assistant.

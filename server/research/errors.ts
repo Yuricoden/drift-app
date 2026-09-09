@@ -1,4 +1,4 @@
-import type { Evidence, ProviderReport, ResearchErrorKind, ResearchProvider } from '../../shared/evidence';
+import type { Evidence, ProviderReport, ResearchErrorKind, ResearchProvider } from '../../shared/evidence.js';
 
 export class ResearchError extends Error {
   reports?: ProviderReport[];

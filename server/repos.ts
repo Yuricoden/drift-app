@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import { getStore } from './db';
-import { env } from './env';
-import { validIndustries } from '../shared/signals';
-import type { Evidence } from '../shared/evidence';
-import type { Conversation, ConversationMeta, ExtractedSignal, OnboardingPrefs, Opportunity, Profile, SavedItem, SavedItemType, Transfer, TrendTopic, WorkspaceSections } from '../shared/types';
+import { getStore } from './db.js';
+import { env } from './env.js';
+import { validIndustries } from '../shared/signals.js';
+import type { Evidence } from '../shared/evidence.js';
+import type { Conversation, ConversationMeta, ExtractedSignal, OnboardingPrefs, Opportunity, Profile, SavedItem, SavedItemType, Transfer, TrendTopic, WorkspaceSections } from '../shared/types.js';
 
 export const OWNER = () => env.email.toLowerCase() || 'owner';
 
@@ -227,4 +227,4 @@ export async function mergeSignal(owner: string, incoming: ExtractedSignal): Pro
   });
 }
 
-export { extractSignalsFromTopics } from './signals/extraction';
+export { extractSignalsFromTopics } from './signals/extraction.js';

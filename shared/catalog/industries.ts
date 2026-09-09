@@ -1,4 +1,4 @@
-import type { Industry } from '../types';
+import type { Industry } from '../types.js';
 
 /** Domains cultural signals move between, used across the map, transfer lab and generators. */
 export const INDUSTRIES: Industry[] = [

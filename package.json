@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run typecheck:server && vite build",
     "start": "tsx --env-file-if-exists=.env.local server/index.ts",
     "preview": "vite preview --port 4173",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && npm run typecheck:server",
+    "typecheck:server": "tsc --noEmit -p tsconfig.server.json",
     "test:browser": "npm run build && node --experimental-websocket --import tsx --import ./server/test-setup.ts server/signals/browser-check.ts",
     "test": "node --import tsx --import ./server/test-setup.ts --test server/llm/research.test.ts server/llm/extract.test.ts server/chat/agent.test.ts server/trends/trends.test.ts server/research/serpapi.test.ts server/research/openrouter-web.test.ts server/signals/extraction.test.ts server/intelligence/generation.test.ts server/signals/routes.test.ts server/deployment.test.ts"
   },

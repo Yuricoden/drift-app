@@ -1,9 +1,9 @@
-import { env } from '../env';
-import { gateway as defaultGateway, type Gateway } from './openrouter';
-import type { ExtractedSignal, SignalStage, Evidence } from '../../shared/types';
-import { ResearchError } from '../research/errors';
-import { validIndustries } from '../../shared/signals';
-import { analysisChat } from './analysis';
+import { env } from '../env.js';
+import { gateway as defaultGateway, type Gateway } from './openrouter.js';
+import type { ExtractedSignal, SignalStage, Evidence } from '../../shared/types.js';
+import { ResearchError } from '../research/errors.js';
+import { validIndustries } from '../../shared/signals.js';
+import { analysisChat } from './analysis.js';
 
 /**
  * Processes raw research text into validated, structured signal data using the

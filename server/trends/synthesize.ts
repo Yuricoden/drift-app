@@ -1,10 +1,10 @@
-import { env } from '../env';
-import { gateway as defaultGateway, LlmError, type Gateway } from '../llm/openrouter';
-import { ResearchError } from '../research/errors';
-import type { ResearchResult } from '../llm/research';
-import type { Evidence } from '../../shared/evidence';
-import type { OnboardingPrefs, TrendChannel } from '../../shared/types';
-import { CHANNEL_GUIDANCE, TOPIC_INSTRUCTIONS, channelWindow } from './topics';
+import { env } from '../env.js';
+import { gateway as defaultGateway, LlmError, type Gateway } from '../llm/openrouter.js';
+import { ResearchError } from '../research/errors.js';
+import type { ResearchResult } from '../llm/research.js';
+import type { Evidence } from '../../shared/evidence.js';
+import type { OnboardingPrefs, TrendChannel } from '../../shared/types.js';
+import { CHANNEL_GUIDANCE, TOPIC_INSTRUCTIONS, channelWindow } from './topics.js';
 
 /**
  * Stage 2 of Start Research: turn retrieved evidence into findings.
@@ -99,7 +99,7 @@ export async function synthesizeTopics(
   } catch (error) {
     if (error instanceof LlmError && error.kind === 'cancelled') throw new ResearchError('cancelled', 'Research cancelled.', 'perplexity-sonar', 'cancelled', 1);
     const kind = error instanceof LlmError && ['credentials', 'budget', 'rate_limited', 'timeout', 'transient'].includes(error.kind)
-      ? error.kind as import('../../shared/evidence').ResearchErrorKind : 'unavailable';
+      ? error.kind as import('../../shared/evidence.js').ResearchErrorKind : 'unavailable';
     // Retrieved evidence is kept so a partial pull can still save other channels.
     throw new ResearchError(kind, `Findings could not be written from the ${channel} evidence (${kind}).`, 'perplexity-sonar', kind, 1, research.evidence);
   }

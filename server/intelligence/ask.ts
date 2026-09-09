@@ -1,7 +1,7 @@
-import type { AskResult, OnboardingPrefs } from '../../shared/types';
-import { listSignals } from '../repos';
-import { momentumLabel } from '../../shared/signals';
-import { runResearch } from '../llm/research';
+import type { AskResult, OnboardingPrefs } from '../../shared/types.js';
+import { listSignals } from '../repos.js';
+import { momentumLabel } from '../../shared/signals.js';
+import { runResearch } from '../llm/research.js';
 
 /** Read-only compatibility answer: no seeded experiments or implicit generation. */
 export async function askDrift(owner: string, question: string, _prefs: OnboardingPrefs, opts: { useWeb?: boolean } = {}): Promise<AskResult> {

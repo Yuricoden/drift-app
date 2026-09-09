@@ -1,6 +1,6 @@
 import { MongoClient, type Db } from 'mongodb';
-import { env } from './env';
-import { fileCollection } from './trends/file-store';
+import { env } from './env.js';
+import { fileCollection } from './trends/file-store.js';
 import { resolve } from 'node:path';
 
 /**

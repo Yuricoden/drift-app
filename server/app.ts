@@ -1,28 +1,28 @@
-import { extraction } from './signals/extraction';
-import { generation, GenerationError } from './intelligence/generation';
+import { extraction } from './signals/extraction.js';
+import { generation, GenerationError } from './intelligence/generation.js';
 import { Router, json, type NextFunction, type Request, type Response } from 'express';
 import { randomUUID } from 'node:crypto';
 import {
   attachAuth, clearSessionCookie, createSession, destroySession, requireAuth,
   safeEqual, sessionOwner, setSessionCookie, tokenFromRequest, verifyCredentials,
-} from './auth';
+} from './auth.js';
 import {
   OWNER, createConversation, deleteConversation, getConversation, getOpportunity, getProfile,
   getSignal as getOwnerSignal, getTransfer, listConversations,
   listOpportunities, listSaved, listSignals, listTransfers, removeSaved, saveItem, saveOnboarding,
   updateConversation, updateSavedCollection,
-} from './repos';
-import { INDUSTRY_MAP } from '../shared/catalog/industries';
-import { askDrift } from './intelligence/ask';
-import { ResearchError } from './llm/research';
-import { collectResearch, parseSources } from './research/collect';
-import { researchStatus } from './research/errors';
-import { extractSignals } from './llm/extract';
-import { runAgent, seededAnswer } from './chat/agent';
-import { LlmError } from './llm/openrouter';
-import { env, loadEnv } from './env';
-import { trends, TrendError } from './trends/service';
-import type { ChatMessage, SavedItemType, WorkspaceSections } from '../shared/types';
+} from './repos.js';
+import { INDUSTRY_MAP } from '../shared/catalog/industries.js';
+import { askDrift } from './intelligence/ask.js';
+import { ResearchError } from './llm/research.js';
+import { collectResearch, parseSources } from './research/collect.js';
+import { researchStatus } from './research/errors.js';
+import { extractSignals } from './llm/extract.js';
+import { runAgent, seededAnswer } from './chat/agent.js';
+import { LlmError } from './llm/openrouter.js';
+import { env, loadEnv } from './env.js';
+import { trends, TrendError } from './trends/service.js';
+import type { ChatMessage, SavedItemType, WorkspaceSections } from '../shared/types.js';
 
 type AsyncHandler = (req: Request, res: Response) => Promise<void>;
 const handle = (fn: AsyncHandler) => (req: Request, res: Response, next: NextFunction) => fn(req, res).catch(next);

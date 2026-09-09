@@ -1,11 +1,11 @@
 import { randomUUID } from 'node:crypto';
-import { env } from '../env';
-import { gateway as defaultGateway, LlmError, type ChatMessageIn, type Gateway } from '../llm/openrouter';
-import { buildTools, type ToolContext, type ToolOutput } from './tools';
-import { evidenceResult } from '../research/evidence';
-import type { collectResearch } from '../research/collect';
-import { listSignals } from '../repos';
-import type { ActionProposal, AskReference, ChatMessage, OnboardingPrefs, ToolEvent } from '../../shared/types';
+import { env } from '../env.js';
+import { gateway as defaultGateway, LlmError, type ChatMessageIn, type Gateway } from '../llm/openrouter.js';
+import { buildTools, type ToolContext, type ToolOutput } from './tools.js';
+import { evidenceResult } from '../research/evidence.js';
+import type { collectResearch } from '../research/collect.js';
+import { listSignals } from '../repos.js';
+import type { ActionProposal, AskReference, ChatMessage, OnboardingPrefs, ToolEvent } from '../../shared/types.js';
 
 export interface AgentOutcome {
   content: string;
@@ -169,7 +169,7 @@ export async function runAgent(opts: {
 
 /** Seeded, non-LLM fallback used when no API key is configured. */
 export async function seededAnswer(owner: string, prefs: OnboardingPrefs, userText: string, useWeb: boolean): Promise<AgentOutcome> {
-  const { askDrift } = await import('../intelligence/ask');
+  const { askDrift } = await import('../intelligence/ask.js');
   const result = await askDrift(owner, userText, prefs, { useWeb });
   const assistantMessage: ChatMessage = {
     id: randomUUID(),

@@ -1,10 +1,10 @@
-import type { OnboardingPrefs, TrendChannel } from '../../shared/types';
-import type { Evidence, ProviderReport, ResearchSource } from '../../shared/evidence';
-import type { ResearchResult } from '../llm/research';
-import { ResearchError } from '../research/errors';
-import { evidenceResult } from '../research/evidence';
-import { researchReddit, researchWeb } from '../research/openrouter-web';
-import { researchTrends, researchYoutube } from '../research/serpapi';
+import type { OnboardingPrefs, TrendChannel } from '../../shared/types.js';
+import type { Evidence, ProviderReport, ResearchSource } from '../../shared/evidence.js';
+import type { ResearchResult } from '../llm/research.js';
+import { ResearchError } from '../research/errors.js';
+import { evidenceResult } from '../research/evidence.js';
+import { researchReddit, researchWeb } from '../research/openrouter-web.js';
+import { researchTrends, researchYoutube } from '../research/serpapi.js';
 
 /**
  * Stage 1 of Start Research: retrieve source evidence.

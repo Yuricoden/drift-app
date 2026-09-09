@@ -1,5 +1,5 @@
 import express from 'express';
-import { createApi } from './app';
+import { createApi } from './app.js';
 
 const app = express();
 app.disable('x-powered-by');

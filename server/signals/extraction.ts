@@ -1,8 +1,8 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { getStore, type Store } from '../db';
-import { extractSignals } from '../llm/extract';
-import { mergeSignal } from '../repos';
-import type { Evidence, ExtractionStatus, TrendTopic } from '../../shared/types';
+import { getStore, type Store } from '../db.js';
+import { extractSignals } from '../llm/extract.js';
+import { mergeSignal } from '../repos.js';
+import type { Evidence, ExtractionStatus, TrendTopic } from '../../shared/types.js';
 
 export const EXTRACTION_VERSION = 'saved-evidence-v2';
 const LEASE_MS = 5 * 60 * 1000;

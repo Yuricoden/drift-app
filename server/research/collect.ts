@@ -1,9 +1,9 @@
-import type { Evidence, ProviderReport, ResearchSource } from '../../shared/evidence';
-import type { ResearchDeps, ResearchResult } from '../llm/research';
-import { researchReddit, researchWeb } from './openrouter-web';
-import { researchTrends, researchYoutube, type YoutubeDeps } from './serpapi';
-import { evidenceResult } from './evidence';
-import { ResearchError } from './errors';
+import type { Evidence, ProviderReport, ResearchSource } from '../../shared/evidence.js';
+import type { ResearchDeps, ResearchResult } from '../llm/research.js';
+import { researchReddit, researchWeb } from './openrouter-web.js';
+import { researchTrends, researchYoutube, type YoutubeDeps } from './serpapi.js';
+import { evidenceResult } from './evidence.js';
+import { ResearchError } from './errors.js';
 
 export const ALL_SOURCES: ResearchSource[] = ['web', 'reddit', 'youtube', 'trends'];
 /** SerpApi serves YouTube and Google Trends; OpenRouter serves web and Reddit. */

@@ -1,8 +1,8 @@
-import type { Evidence, ProviderReport, RelatedQuery, ResearchProvider, TrendMomentum, TrendPoint } from '../../shared/evidence';
-import { env } from '../env';
-import { ResearchError } from './errors';
-import { evidenceResult } from './evidence';
-import { array, count, finite, parseRelativeDays, str, youtubeVideoUrl } from './domains';
+import type { Evidence, ProviderReport, RelatedQuery, ResearchProvider, TrendMomentum, TrendPoint } from '../../shared/evidence.js';
+import { env } from '../env.js';
+import { ResearchError } from './errors.js';
+import { evidenceResult } from './evidence.js';
+import { array, count, finite, parseRelativeDays, str, youtubeVideoUrl } from './domains.js';
 
 type Json = Record<string, any>;
 export interface SerpApiDeps {
