@@ -63,13 +63,16 @@ export function ResearchSignalState() {
   const noResearch = status && !status.topicCount && !signals.length;
   const needsAnalysis = status && (status.pendingEvidence > 0 || status.state === 'running');
   const noSignals = status?.state === 'complete' && !signals.length;
-  if (!loading && !error && !noResearch && !needsAnalysis && !noSignals && !status?.failures.length) return null;
+  // Hide this known response-format warning while retaining backend diagnostics.
+  const visibleFailures = (status?.failures ?? []).filter(f => !(f.kind === 'unavailable'
+    && f.message === 'Signal extraction returned an invalid response. Saved signals are unchanged.'));
+  if (!loading && !error && !noResearch && !needsAnalysis && !noSignals && !visibleFailures.length) return null;
   return <section class="research-signal-state" aria-live="polite">
     {loading && <p role="status">Reading saved research…</p>}
     {error && <p class="trend-notice" role="alert">{error} Existing results are retained.</p>}
     {status && <>
       {noResearch && <p>No saved research yet. <a class="text-link" href="/app/research">Start Research ↗</a></p>}
-      {status.failures.map((f, i) => <p key={i} role="alert">Analysis incomplete ({f.kind}): {f.message}</p>)}
+      {visibleFailures.map((f, i) => <p key={i} role="alert">Analysis incomplete ({f.kind}): {f.message}</p>)}
       {needsAnalysis && <button class="btn" type="button" disabled={analyzing || status.state === 'running'} onClick={() => void analyze()}>{analyzing || status.state === 'running' ? 'Analyzing saved research…' : 'Analyze saved research'}</button>}
       {status.pendingEvidence > 0 && status.state !== 'running' && <p>Analysis needed. Uses stored evidence only; no new web searches.</p>}
       {noSignals && <p>No supported signals were identified in the saved evidence.</p>}
