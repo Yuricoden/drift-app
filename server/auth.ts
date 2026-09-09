@@ -22,7 +22,7 @@ function readCookie(header: string | undefined, name: string): string | undefine
   return undefined;
 }
 
-function safeEqual(a: string, b: string): boolean {
+export function safeEqual(a: string, b: string): boolean {
   const ha = createHmac('sha256', env.sessionSecret).update(a).digest();
   const hb = createHmac('sha256', env.sessionSecret).update(b).digest();
   return timingSafeEqual(ha, hb);

@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+
 /** Server-side environment. Never imported by client code. */
 export interface DriftEnv {
   email: string;
@@ -17,6 +19,13 @@ export interface DriftEnv {
 }
 
 const DEV_SECRET = 'drift-dev-only-secret-change-me';
+
+// Direct Node entry points (tests excluded) bypass vite.config.ts, so load the
+// documented server env file before reading process.env. Vercel uses project
+// environment variables instead.
+if (!process.env.VERCEL && !process.env.DRIFT_TEST && existsSync('.env.local')) {
+  process.loadEnvFile('.env.local');
+}
 
 export function loadEnv(): DriftEnv {
   const email = (process.env.DRIFT_LOGIN_EMAIL ?? '').trim();
