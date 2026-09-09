@@ -4,10 +4,10 @@ import { Router, json, type NextFunction, type Request, type Response } from 'ex
 import { randomUUID } from 'node:crypto';
 import {
   attachAuth, clearSessionCookie, createSession, destroySession, requireAuth,
-  safeEqual, sessionOwner, setSessionCookie, tokenFromRequest, verifyCredentials,
+  authenticateCredentials, sessionOwner, setSessionCookie, tokenFromRequest,
 } from './auth.js';
 import {
-  OWNER, createConversation, deleteConversation, getConversation, getOpportunity, getProfile,
+  createConversation, deleteConversation, getConversation, getOpportunity, getProfile,
   getSignal as getOwnerSignal, getTransfer, listConversations,
   listOpportunities, listSaved, listSignals, listTransfers, removeSaved, saveItem, saveOnboarding,
   updateConversation, updateSavedCollection,
@@ -20,7 +20,7 @@ import { researchStatus } from './research/errors.js';
 import { extractSignals } from './llm/extract.js';
 import { runAgent, seededAnswer } from './chat/agent.js';
 import { LlmError } from './llm/openrouter.js';
-import { env, loadEnv } from './env.js';
+import { env } from './env.js';
 import { trends, TrendError } from './trends/service.js';
 import type { ChatMessage, SavedItemType, WorkspaceSections } from '../shared/types.js';
 
@@ -43,18 +43,22 @@ export function createApi(): Router {
   // ── Auth ──
   api.post('/auth/login', handle(async (req, res) => {
     const { email, password } = (req.body ?? {}) as { email?: string; password?: string };
-    if (typeof email !== 'string' || typeof password !== 'string' || !verifyCredentials(email, password)) {
+    const account = typeof email === 'string' && typeof password === 'string'
+      ? authenticateCredentials(email, password)
+      : null;
+    if (!account) {
       if (process.env.DRIFT_DEBUG) {
-        const expected = loadEnv();
-        console.log(`[auth] login rejected: configured=${!!expected.email && !!expected.password} emailMatch=${typeof email === 'string' && !!expected.email && email.trim().toLowerCase() === expected.email.toLowerCase()} passwordMatch=${typeof password === 'string' && !!expected.password && safeEqual(password, expected.password)}`);
+        const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+        const emailKnown = env.loginAccounts.some(candidate => candidate.email.toLowerCase() === normalizedEmail);
+        console.log(`[auth] login rejected: configuredAccounts=${env.loginAccounts.length} emailKnown=${emailKnown}`);
       }
       res.status(401).json({ error: 'Those credentials do not match the DRIFT account.' });
       return;
     }
-    const owner = OWNER();
+    const owner = account.email.toLowerCase();
     const { token, expiresAt } = await createSession(owner);
     setSessionCookie(res, token, expiresAt);
-    const profile = await getProfile(owner);
+    const profile = await getProfile(owner, account.email);
     res.json({ email: profile.email, onboardingCompleted: profile.onboarding.completed });
   }));
 

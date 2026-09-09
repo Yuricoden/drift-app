@@ -1,23 +1,20 @@
 import { randomUUID } from 'node:crypto';
 import { getStore } from './db.js';
-import { env } from './env.js';
 import { validIndustries } from '../shared/signals.js';
 import type { Evidence } from '../shared/evidence.js';
 import type { Conversation, ConversationMeta, ExtractedSignal, OnboardingPrefs, Opportunity, Profile, SavedItem, SavedItemType, Transfer, TrendTopic, WorkspaceSections } from '../shared/types.js';
-
-export const OWNER = () => env.email.toLowerCase() || 'owner';
 
 function emptyOnboarding(): OnboardingPrefs {
   return { completed: false, completedAt: null, exploring: [], purposes: [], interests: [] };
 }
 
-export async function getProfile(owner: string): Promise<Profile> {
+export async function getProfile(owner: string, email = owner): Promise<Profile> {
   const store = await getStore();
   const existing = await store.profiles.findOne({ owner });
   if (existing) return existing as Profile;
-  const profile: Profile = { owner, email: env.email, onboarding: emptyOnboarding(), updatedAt: new Date().toISOString() };
-  await store.profiles.insertOne(profile);
-  return profile;
+  const profile: Profile = { owner, email, onboarding: emptyOnboarding(), updatedAt: new Date().toISOString() };
+  await store.profiles.insertIfAbsent({ owner }, profile);
+  return (await store.profiles.findOne({ owner })) as Profile;
 }
 
 export async function saveOnboarding(owner: string, prefs: Omit<OnboardingPrefs, 'completed' | 'completedAt'>): Promise<Profile> {

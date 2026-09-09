@@ -2,8 +2,7 @@ import { existsSync } from 'node:fs';
 
 /** Server-side environment. Never imported by client code. */
 export interface DriftEnv {
-  email: string;
-  password: string;
+  loginAccounts: LoginAccount[];
   sessionSecret: string;
   mongoUri: string;
   mongoDb: string;
@@ -18,6 +17,11 @@ export interface DriftEnv {
   port: number;
 }
 
+export interface LoginAccount {
+  email: string;
+  password: string;
+}
+
 const DEV_SECRET = 'drift-dev-only-secret-change-me';
 
 // Direct Node entry points (tests excluded) bypass vite.config.ts, so load the
@@ -28,10 +32,31 @@ if (!process.env.VERCEL && !process.env.DRIFT_TEST && existsSync('.env.local')) 
 }
 
 export function loadEnv(): DriftEnv {
-  const email = (process.env.DRIFT_LOGIN_EMAIL ?? '').trim();
-  const password = process.env.DRIFT_LOGIN_PASSWORD ?? '';
-  if (!email || !password) {
-    console.warn('[drift] DRIFT_LOGIN_EMAIL / DRIFT_LOGIN_PASSWORD are not set — all logins will be rejected. See .env.example.');
+  const configuredAccounts = [
+    ['DRIFT_LOGIN_EMAIL', 'DRIFT_LOGIN_PASSWORD'],
+    ['DRIFT_LOGIN_EMAIL_2', 'DRIFT_LOGIN_PASSWORD_2'],
+    ['DRIFT_LOGIN_EMAIL_3', 'DRIFT_LOGIN_PASSWORD_3'],
+  ] as const;
+  const loginAccounts: LoginAccount[] = [];
+  const seenEmails = new Set<string>();
+  for (const [emailKey, passwordKey] of configuredAccounts) {
+    const email = (process.env[emailKey] ?? '').trim();
+    const password = process.env[passwordKey] ?? '';
+    if (!email && !password) continue;
+    if (!email || !password) {
+      console.warn(`[drift] ${emailKey} / ${passwordKey} is incomplete and will be ignored.`);
+      continue;
+    }
+    const owner = email.toLowerCase();
+    if (seenEmails.has(owner)) {
+      console.warn(`[drift] Duplicate login email in ${emailKey} will be ignored.`);
+      continue;
+    }
+    seenEmails.add(owner);
+    loginAccounts.push({ email, password });
+  }
+  if (!loginAccounts.length) {
+    console.warn('[drift] No complete DRIFT login credentials are set — all logins will be rejected. See .env.example.');
   }
   const sessionSecret = process.env.SESSION_SECRET || DEV_SECRET;
   if (sessionSecret === DEV_SECRET) {
@@ -42,8 +67,7 @@ export function loadEnv(): DriftEnv {
     console.warn('[drift] MONGODB_URI is not set — using a temporary in-memory store. Data will NOT persist across restarts.');
   }
   return {
-    email,
-    password,
+    loginAccounts,
     sessionSecret,
     mongoUri,
     mongoDb: process.env.MONGODB_DB || 'drift',

@@ -76,7 +76,7 @@ export function TransferLab() {
       <header class="page-head">
         <p class="page-head__tag mono">03 / Transfer Lab</p>
         <h1 class="page-head__title">Move a signal<br /><em>across a border.</em></h1>
-        <p class="page-head__sub">Choose saved evidence and a target industry. AI interprets a hypothesis without new web searches. The industry list is taxonomy, not factual evidence.</p>
+        <p class="page-head__sub">Turn cultural signals into new product, brand, and venture opportunities. Choose a signal from your saved research and a target industry. DRIFT explores how it could translate into unmet needs and business ideas to test.</p>
       </header>
 
       <ResearchSignalState />

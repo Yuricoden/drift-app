@@ -79,9 +79,9 @@ test('compiled API starts and authenticates in plain Node without the developmen
       const server = createServer(app);
       try {
         await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-        const call = (path, body, cookie) => new Promise((resolve, reject) => {
+        const call = (path, body, cookie, method = body ? 'POST' : 'GET') => new Promise((resolve, reject) => {
           const req = request({hostname: '127.0.0.1', port: server.address().port, path,
-            method: body ? 'POST' : 'GET', headers: { 'content-type': 'application/json', ...(cookie ? { cookie } : {}) }}, res => {
+            method, headers: { 'content-type': 'application/json', ...(cookie ? { cookie } : {}) }}, res => {
             let text = ''; res.on('data', chunk => text += chunk);
             res.on('end', () => resolve({status: res.statusCode, data: JSON.parse(text), cookies: res.headers['set-cookie']}));
           });
@@ -93,17 +93,36 @@ test('compiled API starts and authenticates in plain Node without the developmen
         assert.equal(login.status, 200);
         assert.match(login.cookies[0], /HttpOnly/);
         assert.match(login.cookies[0], /Secure/);
-        const session = await call('/api/auth/session', null, login.cookies[0].split(';')[0]);
-        assert.equal(session.data.authenticated, true);
-        console.log('Native Node login passed');
+        const firstCookie = login.cookies[0].split(';')[0];
+        await call('/api/profile/onboarding', { exploring: ['Design'], purposes: [], interests: [] }, firstCookie, 'PUT');
+        const firstSession = await call('/api/auth/session', null, firstCookie);
+        assert.equal(firstSession.data.authenticated, true);
+        assert.equal(firstSession.data.email, 'fixture@example.test');
+        assert.equal(firstSession.data.onboardingCompleted, true);
+
+        assert.equal((await call('/api/auth/login', {email: 'second@example.test', password: 'fixture-only-password'})).status, 401);
+        const secondLogin = await call('/api/auth/login', {email: 'second@example.test', password: 'second-only-password'});
+        assert.equal(secondLogin.status, 200);
+        const secondSession = await call('/api/auth/session', null, secondLogin.cookies[0].split(';')[0]);
+        assert.equal(secondSession.data.email, 'second@example.test');
+        assert.equal(secondSession.data.onboardingCompleted, false);
+
+        const thirdLogin = await call('/api/auth/login', {email: 'third@example.test', password: 'third-only-password'});
+        assert.equal(thirdLogin.status, 200);
+        const thirdSession = await call('/api/auth/session', null, thirdLogin.cookies[0].split(';')[0]);
+        assert.equal(thirdSession.data.email, 'third@example.test');
+        assert.equal(thirdSession.data.onboardingCompleted, false);
+        console.log('Native Node multi-account login passed');
       } finally { await new Promise(resolve => server.close(resolve)); }
     `;
     const result = await promisify(execFile)(process.execPath, ['--input-type=module', '-e', check], {
       cwd: directory, timeout: 15000,
       env: { PATH: process.env.PATH, NODE_ENV: 'production', VERCEL: '1',
         DRIFT_LOGIN_EMAIL: 'fixture@example.test', DRIFT_LOGIN_PASSWORD: 'fixture-only-password',
+        DRIFT_LOGIN_EMAIL_2: 'second@example.test', DRIFT_LOGIN_PASSWORD_2: 'second-only-password',
+        DRIFT_LOGIN_EMAIL_3: 'third@example.test', DRIFT_LOGIN_PASSWORD_3: 'third-only-password',
         SESSION_SECRET: 'fixture-only-session-secret', DRIFT_RESEARCH_DATA_DIR: join(directory, 'research') },
     });
-    assert.match(result.stdout, /Native Node login passed/);
+    assert.match(result.stdout, /Native Node multi-account login passed/);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });

@@ -1,6 +1,7 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import type { NextFunction, Request, Response } from 'express';
 import { env } from './env.js';
+import type { LoginAccount } from './env.js';
 import { getStore } from './db.js';
 
 export const SESSION_COOKIE = 'drift_session';
@@ -28,12 +29,16 @@ export function safeEqual(a: string, b: string): boolean {
   return timingSafeEqual(ha, hb);
 }
 
-/** Constant-time comparison of both fields against the environment credentials. */
-export function verifyCredentials(email: string, password: string): boolean {
-  if (!env.email || !env.password) return false;
-  const emailOk = safeEqual(email.trim().toLowerCase(), env.email.toLowerCase());
-  const passwordOk = safeEqual(password, env.password);
-  return emailOk && passwordOk;
+/** Returns the matching predefined account after comparing every credential pair. */
+export function authenticateCredentials(email: string, password: string): LoginAccount | null {
+  const normalizedEmail = email.trim().toLowerCase();
+  let match: LoginAccount | null = null;
+  for (const account of env.loginAccounts) {
+    const emailOk = safeEqual(normalizedEmail, account.email.toLowerCase());
+    const passwordOk = safeEqual(password, account.password);
+    if (emailOk && passwordOk) match = account;
+  }
+  return match;
 }
 
 export async function createSession(owner: string): Promise<{ token: string; expiresAt: Date }> {
